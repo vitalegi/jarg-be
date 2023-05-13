@@ -56,7 +56,7 @@ public class BattleRunner implements CommandLineRunner {
         battleService.addSubject(id, 8, 4, monster(team2, null, "E", 20, 5, 3));
         battleService.addSubject(id, 3, 6, monster(team2, null, "F", 20, 5, 3));
 
-        RenderBattleMap renderer = new RenderBattleMap(battle);
+        RenderBattleMap renderer = new RenderBattleMap(battle, player);
 
         renderer.render();
 

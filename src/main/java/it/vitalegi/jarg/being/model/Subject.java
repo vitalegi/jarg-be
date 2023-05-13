@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 public class Subject {
     UUID id;
+    Team team;
     String name;
     int maxHp;
     Stats stats;
