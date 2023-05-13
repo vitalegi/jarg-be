@@ -25,12 +25,21 @@ public class BattleService {
 
     public Subject addSubject(UUID battleId, Coordinate coordinate, Subject subject) {
         var battle = getBattle(battleId);
-        checkCoordinate(battleId, coordinate);
+        checkExistsCoordinate(battleId, coordinate);
+        if (!canStand(battleId, coordinate, subject)) {
+            throw new IllegalArgumentException("Subject " + subject.getId() + " can't stand on " + coordinate);
+        }
         battle.getMapPlacement().addSubject(coordinate, subject);
         return subject;
     }
 
-    public void checkCoordinate(UUID battleId, Coordinate coordinate) {
+    public boolean canStand(UUID battleId, Coordinate coordinate, Subject subject) {
+        var battle = getBattle(battleId);
+        var tile = battle.getMap().getTile(coordinate);
+        return !tile.isBlocked();
+    }
+
+    public void checkExistsCoordinate(UUID battleId, Coordinate coordinate) {
         if (!existsCoordinate(battleId, coordinate)) {
             throw new IllegalArgumentException("Coordinate " + coordinate + " is empty");
         }

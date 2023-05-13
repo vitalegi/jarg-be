@@ -40,7 +40,7 @@ public class RenderBattleMap {
         var subjects = battle.getMapPlacement().getSubjects(c);
         if (subjects.isEmpty()) {
             var tile = battle.getMap().getTile(c);
-            return ' ';
+            return tile.getTile();
         } else {
             return subjects.get(0).getName().charAt(0);
         }

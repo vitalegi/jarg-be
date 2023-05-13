@@ -9,6 +9,10 @@ public class MapBuilder {
         this.map = map;
     }
 
+    public MapBuilder() {
+        this(new DefaultMap());
+    }
+
     public IMap build() {
         return map;
     }
@@ -19,8 +23,8 @@ public class MapBuilder {
     }
 
     public MapBuilder tiles(int fromWidth, int toWidth, int fromHeight, int toHeight, Tile tile) {
-        for (int width = fromWidth; width < toWidth; width++) {
-            for (int height = fromHeight; height < toHeight; height++) {
+        for (int width = fromWidth; width <= toWidth; width++) {
+            for (int height = fromHeight; height <= toHeight; height++) {
                 tile(new Coordinate(width, height), tile);
             }
         }

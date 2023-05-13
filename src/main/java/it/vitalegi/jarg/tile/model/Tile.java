@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Tile {
-    boolean canTraverseByFoot;
-    boolean canStandOver;
+    char tile;
+    boolean blocked;
 
 }

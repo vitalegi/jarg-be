@@ -10,7 +10,6 @@ import it.vitalegi.jarg.being.model.Team;
 import it.vitalegi.jarg.being.model.Trainer;
 import it.vitalegi.jarg.being.model.User;
 import it.vitalegi.jarg.being.model.UserType;
-import it.vitalegi.jarg.map.model.DefaultMap;
 import it.vitalegi.jarg.map.model.MapBuilder;
 import it.vitalegi.jarg.render.RenderBattleMap;
 import it.vitalegi.jarg.tile.model.TileBuilder;
@@ -34,7 +33,11 @@ public class BattleRunner implements CommandLineRunner {
         var battle = new Battle();
         battle.setTurnStatus(new TurnStatus());
         battle.setMapPlacement(new MapPlacement());
-        battle.setMap(new MapBuilder(new DefaultMap()).tiles(0, 10, 0, 10, TileBuilder.grassTile()).build());
+        battle.setMap( //
+                new MapBuilder() //
+                                 .tiles(0, 20, 0, 6, TileBuilder.grass()) //
+                                 .tiles(4, 5, 5, 6, TileBuilder.obstacle()) //
+                                 .build());
 
         var id = battleService.addBattle(battle);
 
