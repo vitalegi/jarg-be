@@ -30,6 +30,7 @@ public class BattleService {
             throw new IllegalArgumentException("Subject " + subject.getId() + " can't stand on " + coordinate);
         }
         battle.getMapPlacement().addSubject(coordinate, subject);
+        battle.getTurnStatus().addSubject(subject);
         return subject;
     }
 

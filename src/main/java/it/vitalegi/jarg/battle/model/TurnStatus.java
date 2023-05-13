@@ -14,20 +14,20 @@ public class TurnStatus {
         turns = new LinkedList<>();
     }
 
-    public void addSubject(TurnStatus turnStatus, Subject subject) {
-        turnStatus.getTurns().add(subject);
+    public void addSubject(Subject subject) {
+        turns.add(subject);
     }
 
-    public void addSubjects(TurnStatus turnStatus, List<Subject> subjects) {
+    public void addSubjects(List<Subject> subjects) {
 
     }
 
-    public Subject getFirst(TurnStatus turnStatus) {
-        return turnStatus.getTurns().get(0);
+    public Subject getFirst() {
+        return turns.get(0);
     }
 
-    public void next(TurnStatus turnStatus) {
-        var subject = turnStatus.getTurns().remove(0);
-        turnStatus.getTurns().add(subject);
+    public void next() {
+        var subject = turns.remove(0);
+        turns.add(subject);
     }
 }

@@ -11,6 +11,6 @@ public class ObstacleTile implements Tile {
     }
 
     public void render(Ansi ansi) {
-        ansi.bgRgb(0, 0, 0).a(' ').reset();
+        ansi.bgRgb(255, 255, 255).a(' ').reset();
     }
 }

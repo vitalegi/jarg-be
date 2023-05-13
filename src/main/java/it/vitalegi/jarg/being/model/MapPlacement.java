@@ -1,6 +1,5 @@
 package it.vitalegi.jarg.being.model;
 
-import it.vitalegi.jarg.being.model.Subject;
 import it.vitalegi.jarg.map.model.Coordinate;
 
 import java.util.ArrayList;
@@ -34,6 +33,10 @@ public class MapPlacement {
             return coordinatePlacements.get(coordinate);
         }
         return Collections.emptyList();
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
     public void moveSubject(Coordinate newCoordinate, Subject subject) {

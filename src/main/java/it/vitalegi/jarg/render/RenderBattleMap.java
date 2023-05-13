@@ -7,6 +7,9 @@ import it.vitalegi.jarg.map.model.Coordinate;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class RenderBattleMap {
@@ -21,6 +24,8 @@ public class RenderBattleMap {
 
     public void render() {
         AnsiConsole.systemInstall();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
 
         Ansi ansi = ansi();
 
@@ -31,6 +36,8 @@ public class RenderBattleMap {
                 drawTile(ansi, width, height);
             }
             rightFrame(ansi);
+            printCharacter(ansi, height);
+            ansi.a("\n");
         }
 
         bottomFrame(ansi);
@@ -41,27 +48,34 @@ public class RenderBattleMap {
 
     protected void bottomFrame(Ansi ansi) {
         for (int width = 0; width <= battle.getMap().getWidth() + 2; width++) {
-            ansi.append("#");
+            ansi.bgRgb(255, 255, 255).a(' ').reset();
         }
-        ansi.append("\n");
+        ansi.a("\n");
     }
 
     protected void drawTile(Ansi ansi, int width, int height) {
         var c = new Coordinate(width, height);
         var subjects = battle.getMapPlacement().getSubjects(c);
         if (subjects.isEmpty()) {
-            var tile = battle.getMap().getTile(c);
-            tile.render(ansi);
+            battle.getMap().getTile(c).render(ansi);
         } else {
-            var subject = subjects.get(0);
-            if (isAlly(subject)) {
-                ansi.bgGreen();
-            } else {
-                ansi.bgRed();
-            }
-            ansi.a(subject.getName().charAt(0));
-            ansi.reset();
+            renderSubject(ansi, subjects.get(0));
         }
+    }
+
+    protected String fixedLengthString(String str, int len) {
+        if (str.length() > len) {
+            return str.substring(0, len);
+        }
+        while (str.length() < len) {
+            str += " ";
+        }
+        return str;
+    }
+
+    protected boolean isActiveCharacter(Subject subject) {
+        var active = battle.getTurnStatus().getFirst();
+        return active != null && active.getId().equals(subject.getId());
     }
 
     protected boolean isAlly(Subject subject) {
@@ -75,17 +89,54 @@ public class RenderBattleMap {
     }
 
     protected void leftFrame(Ansi ansi) {
-        ansi.append("#");
+        ansi.bgRgb(255, 255, 255).a(' ').reset();
+    }
+
+    protected void printCharacter(Ansi ansi, int line) {
+        ansi.a(" ");
+
+        var subjects = battle.getMapPlacement().getSubjects().stream().sorted(Comparator.comparing(Subject::getName))
+                             .collect(Collectors.toList());
+        if (line < subjects.size()) {
+            var subject = subjects.get(line);
+            if (isActiveCharacter(subject)) {
+                ansi.a("> ");
+                setSubjectColor(ansi, subject);
+                ansi.a(fixedLengthString(subject.getName(), 8));
+            } else {
+                setSubjectColor(ansi, subject);
+                ansi.a(fixedLengthString(subject.getName(), 10));
+            }
+            ansi.reset();
+            ansi.a(" " + subject.getStats().getHp() + "/" + subject.getMaxHp());
+        }
+    }
+
+    protected void renderSubject(Ansi ansi, Subject subject) {
+        setSubjectColor(ansi, subject);
+        ansi.a(subject.getName().charAt(0));
+        ansi.reset();
     }
 
     protected void rightFrame(Ansi ansi) {
-        ansi.append("#\n");
+        ansi.bgRgb(255, 255, 255).a(' ').reset();
+    }
+
+    protected void setSubjectColor(Ansi ansi, Subject subject) {
+        if (isAlly(subject)) {
+            ansi.bgGreen();
+        } else {
+            ansi.bgRed();
+        }
     }
 
     protected void topFrame(Ansi ansi) {
+        ansi.bgRgb(255, 255, 255);
         for (int width = 0; width <= battle.getMap().getWidth() + 2; width++) {
-            ansi.append("#");
+            ansi.a(' ');
         }
-        ansi.append("\n");
+        ansi.reset();
+        ansi.a(" Characters");
+        ansi.a("\n");
     }
 }
