@@ -17,10 +17,12 @@ import it.vitalegi.jarg.tile.model.TileBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Profile("run")
 @Slf4j
 @Component
 public class BattleRunner implements CommandLineRunner {
