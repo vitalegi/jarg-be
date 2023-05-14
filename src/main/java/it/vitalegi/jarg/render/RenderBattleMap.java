@@ -2,7 +2,7 @@ package it.vitalegi.jarg.render;
 
 import it.vitalegi.jarg.battle.model.Battle;
 import it.vitalegi.jarg.being.model.Subject;
-import it.vitalegi.jarg.being.model.User;
+import it.vitalegi.jarg.player.user.User;
 import it.vitalegi.jarg.map.model.Coordinate;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;

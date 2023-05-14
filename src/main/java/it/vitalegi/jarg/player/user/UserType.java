@@ -1,4 +1,4 @@
-package it.vitalegi.jarg.being.model;
+package it.vitalegi.jarg.player.user;
 
 public enum UserType {
     PLAYER, NPC

@@ -1,5 +1,6 @@
 package it.vitalegi.jarg.being.model;
 
+import it.vitalegi.jarg.player.user.User;
 import lombok.Data;
 
 import java.util.Objects;
