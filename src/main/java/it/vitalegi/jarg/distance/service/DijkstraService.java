@@ -4,6 +4,7 @@ import it.vitalegi.jarg.distance.model.DijkstraNode;
 import it.vitalegi.jarg.distance.model.Node;
 import it.vitalegi.jarg.map.model.Coordinate;
 import it.vitalegi.jarg.map.model.IMap;
+import it.vitalegi.jarg.util.NeighborsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -67,13 +68,6 @@ public class DijkstraService {
         return coordinates;
     }
 
-    public List<Coordinate> getNeighbors(Coordinate coordinate) {
-        return Arrays.asList(new Coordinate(coordinate.getWidth() - 1, coordinate.getHeight()),
-                new Coordinate(coordinate.getWidth() + 1, coordinate.getHeight()),
-                new Coordinate(coordinate.getWidth(), coordinate.getHeight() - 1),
-                new Coordinate(coordinate.getWidth(), coordinate.getHeight() + 1));
-    }
-
     protected DijkstraNode getLowestDistanceNode(List<DijkstraNode> unvisited) {
         DijkstraNode lowestDistanceNode = null;
         int lowestDistance = Integer.MAX_VALUE;
@@ -87,7 +81,7 @@ public class DijkstraService {
     }
 
     protected Stream<DijkstraNode> getNeighbors(Map<Coordinate, DijkstraNode> graph, DijkstraNode source) {
-        return getNeighbors(source.getCoordinate()).stream().filter(graph::containsKey).map(graph::get);
+        return NeighborsUtil.getNeighbors(source.getCoordinate()).stream().filter(graph::containsKey).map(graph::get);
     }
 
     protected Map<Coordinate, DijkstraNode> graph(IMap map) {

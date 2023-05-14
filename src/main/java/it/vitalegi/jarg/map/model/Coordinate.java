@@ -25,4 +25,8 @@ public class Coordinate {
         Coordinate that = (Coordinate) o;
         return width == that.width && height == that.height;
     }
+
+    public String toPrettyString() {
+        return "(" + getWidth() + ", " + getHeight() + ")";
+    }
 }

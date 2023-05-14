@@ -41,7 +41,7 @@ public class RenderBattleMap {
         }
 
         bottomFrame(ansi);
-
+        renderEvents(ansi);
         System.out.println(ansi);
         AnsiConsole.systemUninstall();
     }
@@ -111,6 +111,11 @@ public class RenderBattleMap {
             ansi.a(" " + subject.getStats().getHp() + "/" + subject.getMaxHp());
             ansi.a(" " + battle.getMapPlacement().getSubjectPlacement(subject));
         }
+    }
+
+    protected void renderEvents(Ansi ansi) {
+        ansi.a("\n");
+        battle.getEvents().stream().limit(10).forEach(e -> ansi.append(e.getMessage() + "\n"));
     }
 
     protected void renderSubject(Ansi ansi, Subject subject) {

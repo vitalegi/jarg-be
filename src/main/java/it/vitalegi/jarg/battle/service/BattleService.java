@@ -1,6 +1,7 @@
 package it.vitalegi.jarg.battle.service;
 
 import it.vitalegi.jarg.battle.model.Battle;
+import it.vitalegi.jarg.battle.model.Event;
 import it.vitalegi.jarg.battle.repository.BattleRepository;
 import it.vitalegi.jarg.being.model.Subject;
 import it.vitalegi.jarg.distance.filter.EmptyOrOccupiedByAllyTile;
@@ -8,6 +9,7 @@ import it.vitalegi.jarg.distance.filter.TraversableTile;
 import it.vitalegi.jarg.distance.model.Node;
 import it.vitalegi.jarg.distance.service.DijkstraService;
 import it.vitalegi.jarg.map.model.Coordinate;
+import it.vitalegi.jarg.util.NeighborsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,16 +56,12 @@ public class BattleService {
         log.info("{} attacks {}, -{}HP, remaining {}HP", source.getName(), target.getName(), damage, remainingHp);
         if (remainingHp > 0) {
             targetStats.setHp(remainingHp);
+            addEvent(battleId, source.getName() + " deals " + damage + "HP to " + target.getName());
         } else {
             log.info("{} is dead.", target.getName());
+            addEvent(battleId, source.getName() + " kills " + target.getName());
             removeSubject(battleId, target);
         }
-    }
-
-    protected void removeSubject(UUID battleId, Subject subject) {
-        var battle = getBattle(battleId);
-        battle.getMapPlacement().removeSubject(subject);
-        battle.getTurnStatus().removeSubject(subject);
     }
 
     public boolean canStand(UUID battleId, Subject subject, Coordinate coordinate) {
@@ -115,7 +113,7 @@ public class BattleService {
     public List<Coordinate> getNeighbors(UUID battleId, Coordinate coordinate) {
         var battle = getBattle(battleId);
         var map = battle.getMap();
-        return dijkstraService.getNeighbors(coordinate).stream().filter(map::hasTile).collect(Collectors.toList());
+        return NeighborsUtil.getNeighbors(coordinate).stream().filter(map::hasTile).collect(Collectors.toList());
     }
 
     public Coordinate getPosition(UUID battleId, Subject subject) {
@@ -143,6 +141,19 @@ public class BattleService {
         if (path.size() <= 1) {
             return;
         }
-        getBattle(battleId).getMapPlacement().moveSubject(path.get(1), subject);
+        var destination = path.get(1);
+        getBattle(battleId).getMapPlacement().moveSubject(destination, subject);
+        addEvent(battleId, subject.getName() + " moves to " + destination.toPrettyString());
+    }
+
+    protected void addEvent(UUID battleId, String event) {
+        getBattle(battleId).getEvents()
+                           .add(0, new Event(event));
+    }
+
+    protected void removeSubject(UUID battleId, Subject subject) {
+        var battle = getBattle(battleId);
+        battle.getMapPlacement().removeSubject(subject);
+        battle.getTurnStatus().removeSubject(subject);
     }
 }

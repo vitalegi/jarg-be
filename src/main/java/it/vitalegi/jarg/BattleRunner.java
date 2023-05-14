@@ -44,12 +44,14 @@ public class BattleRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         var battle = new Battle();
+        battle.setEvents(new ArrayList<>());
         battle.setTurnStatus(new TurnStatus());
         battle.setMapPlacement(new MapPlacement());
         battle.setMap( //
                 new MapBuilder() //
-                                 .tiles(0, 20, 0, 6, TileBuilder.grass()) //
-                                 .tiles(4, 5, 5, 6, TileBuilder.obstacle()) //
+                                 .tiles(0, 20, 0, 10, TileBuilder.grass()) //
+                                 .tiles(4, 5, 0, 3, TileBuilder.obstacle()) //
+                                 .tiles(4, 5, 6, 9, TileBuilder.obstacle()) //
                                  .build());
 
         var id = battleService.addBattle(battle);
@@ -63,14 +65,13 @@ public class BattleRunner implements CommandLineRunner {
         battleService.addSubject(id, 0, 1, monster(team1, trainer1, "Abcdefghilj", 20, 5, 3));
         battleService.addSubject(id, 3, 2, monster(team1, trainer1, "B", 20, 5, 3));
         battleService.addSubject(id, 0, 2, monster(team1, trainer1, "C", 20, 5, 3));
-        battleService.addSubject(id, 4, 1, monster(team1, trainer1, "D", 20, 5, 3));
 
         var npc = npc();
         var team2 = team(npc);
         battleAIs.add(battleAiFactory.berserker(id, team2));
-        battleService.addSubject(id, 4, 4, monster(team2, null, "E", 20, 5, 3));
+        battleService.addSubject(id, 6, 4, monster(team2, null, "E", 20, 5, 3));
         battleService.addSubject(id, 8, 4, monster(team2, null, "F", 20, 5, 3));
-        battleService.addSubject(id, 3, 6, monster(team2, null, "G", 20, 5, 3));
+        battleService.addSubject(id, 6, 6, monster(team2, null, "G", 20, 5, 3));
 
         RenderBattleMap renderer = new RenderBattleMap(battle, player);
 
