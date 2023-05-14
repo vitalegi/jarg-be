@@ -18,10 +18,6 @@ public class TurnStatus {
         turns.add(subject);
     }
 
-    public void addSubjects(List<Subject> subjects) {
-
-    }
-
     public Subject getFirst() {
         return turns.get(0);
     }
@@ -29,5 +25,9 @@ public class TurnStatus {
     public void next() {
         var subject = turns.remove(0);
         turns.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        turns.remove(subject);
     }
 }

@@ -1,7 +1,9 @@
 package it.vitalegi.jarg.being.model;
 
+import it.vitalegi.jarg.battleaction.model.BattleAction;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,6 +14,8 @@ public class Subject {
     String name;
     int maxHp;
     Stats stats;
+
+    List<BattleAction> actions;
 
     @Override
     public int hashCode() {
@@ -24,5 +28,10 @@ public class Subject {
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
         return Objects.equals(id, subject.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 }

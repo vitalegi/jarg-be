@@ -1,13 +1,16 @@
 package it.vitalegi.jarg.being.model;
 
 import it.vitalegi.jarg.map.model.Coordinate;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 public class MapPlacement {
     protected List<Subject> subjects;
     protected Map<Coordinate, List<Subject>> coordinatePlacements;
@@ -28,15 +31,19 @@ public class MapPlacement {
         subjectsPlacement.put(subject, coordinate);
     }
 
+    public Coordinate getSubjectPlacement(Subject subject) {
+        return subjectsPlacement.get(subject);
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
     public List<Subject> getSubjects(Coordinate coordinate) {
         if (coordinatePlacements.containsKey(coordinate)) {
             return coordinatePlacements.get(coordinate);
         }
         return Collections.emptyList();
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
     }
 
     public void moveSubject(Coordinate newCoordinate, Subject subject) {
@@ -47,6 +54,13 @@ public class MapPlacement {
             coordinatePlacements.put(newCoordinate, new ArrayList<>());
         }
         coordinatePlacements.get(newCoordinate).add(subject);
+        log.info("old ({}): {}, new ({}): {}", oldCoordinate, coordinatePlacements.get(oldCoordinate).stream()
+                                                                                  .map(Subject::getId)
+                                                                                  .collect(Collectors.toList()),
+                newCoordinate, coordinatePlacements.get(newCoordinate)
+                                                   .stream()
+                                                   .map(Subject::getId)
+                                                   .collect(Collectors.toList()));
     }
 
     public void removeSubject(Subject subject) {

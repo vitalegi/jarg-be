@@ -109,6 +109,7 @@ public class RenderBattleMap {
             }
             ansi.reset();
             ansi.a(" " + subject.getStats().getHp() + "/" + subject.getMaxHp());
+            ansi.a(" " + battle.getMapPlacement().getSubjectPlacement(subject));
         }
     }
 

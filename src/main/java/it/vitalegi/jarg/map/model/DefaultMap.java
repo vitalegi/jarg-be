@@ -4,6 +4,7 @@ import it.vitalegi.jarg.tile.model.Tile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class DefaultMap implements IMap {
     protected int width;
@@ -33,6 +34,15 @@ public class DefaultMap implements IMap {
             tiles.put(coordinate, tile);
         }
         computeSize();
+    }
+
+    @Override
+    public Stream<Coordinate> getCoordinates() {
+        return tiles.keySet().stream();
+    }
+
+    public boolean hasTile(Coordinate coordinate) {
+        return tiles.containsKey(coordinate);
     }
 
     protected void computeSize() {
